@@ -1,0 +1,75 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "jalshi"
+version = "0.1.0"
+description = "Kalshi BTC HFT Trading System"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    # HTTP client for Kalshi API
+    "httpx>=0.27.0",
+
+    # Cryptography for RSA signing
+    "cryptography>=42.0.0",
+
+    # Data handling
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
+
+    # Configuration
+    "python-dotenv>=1.0.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+
+    # Logging
+    "structlog>=24.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    # Testing
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.0.0",
+    "respx>=0.21.0",
+
+    # Code quality
+    "ruff>=0.3.0",
+    "mypy>=1.8.0",
+
+    # Pre-commit
+    "pre-commit>=3.6.0",
+
+    # Security scanning
+    "safety>=3.0.0",
+    "pip-audit>=2.7.0",
+]
+
+notebook = [
+    "jupyter>=1.0.0",
+    "matplotlib>=3.8.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+[tool.hatch.build.targets.editable]
+packages = ["src"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+[tool.mypy]
+python_version = "3.10"
+strict = true

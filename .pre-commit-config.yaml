@@ -1,0 +1,57 @@
+# =============================================================================
+# Pre-commit hooks for security and code quality
+# =============================================================================
+# Install: pip install pre-commit && pre-commit install
+#
+# These hooks run automatically before each commit to prevent:
+# - Accidentally committing API keys or private keys
+# - Committing large files that shouldn't be in git
+# - Basic code quality issues
+# =============================================================================
+
+repos:
+  # ---------------------------------------------------------------------------
+  # Gitleaks - Detect secrets in commits (CRITICAL for security)
+  # ---------------------------------------------------------------------------
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.4
+    hooks:
+      - id: gitleaks
+        args: ['--config', '.gitleaks.toml']
+
+  # ---------------------------------------------------------------------------
+  # Standard pre-commit hooks
+  # ---------------------------------------------------------------------------
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      # Detect RSA/DSA/EC private keys - CRITICAL
+      - id: detect-private-key
+        exclude: '\.env\.example$'
+
+      # Prevent large files (like accidentally committing data files)
+      - id: check-added-large-files
+        args: ['--maxkb=2000']
+
+      # Prevent merge conflict markers
+      - id: check-merge-conflict
+
+      # File hygiene
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-toml
+      - id: check-json
+
+      # Don't commit directly to main
+      - id: no-commit-to-branch
+        args: ['--branch', 'main']
+
+  # ---------------------------------------------------------------------------
+  # Ruff - Optional linting (won't block commits)
+  # ---------------------------------------------------------------------------
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.3.0
+    hooks:
+      - id: ruff
+        args: ['--fix', '--exit-zero']  # Fix issues but don't fail
