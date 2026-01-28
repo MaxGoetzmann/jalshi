@@ -208,6 +208,7 @@ __marimo__/
 
 # Claude
 .claude/
+CLAUDE.md
 
 # =============================================================================
 # SECURITY - Credentials and secrets (CRITICAL!)
